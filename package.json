@@ -1,0 +1,52 @@
+{
+    "name": "pip-clients-quotes-node",
+    "version": "1.0.2",
+    "author": "Digital Living Software Corp. <www.digitallivingsoftware.com>",
+    "description": "Node.js client sdk for pip-services-quotes microservice",
+    "contributors": [
+        {
+            "name": "Sergey Seroukhov",
+            "email": "seroukhov@gmail.com"
+        }
+    ],
+    "main": "./lib/src/index.js",
+    "keywords": [
+        "pip.services", 
+        "quotes",
+        "microservice",
+        "client",
+        "sdk"
+    ],
+    "noAnalyze": true,
+    "repository" : {
+        "type": "git",
+        "url": "ssh://git@github.com:pip-services-content/pip-clients-quotes-node.git"
+    },
+    "license": "MIT",
+    "engines": {
+        "node": ">=0.6.14"
+    },
+    "private": false,
+    "scripts": {
+        "build": "tsc",
+        "watch": "tsc --watch",
+        "test": "mocha -t 5000 -R spec -u tdd --recursive ./lib/test",
+        "retest": "tsc && mocha -t 5000 -R spec -u tdd --recursive ./lib/test",
+        "benchmark": "matcha -R clean -I tdd ./lib/benchmark/run.js",
+        "rebenchmark": "tsc && matcha -R clean -I tdd ./lib/benchmark/run.js"
+    },
+    "dependencies": {
+        "lodash": "*",
+        "async": "*",
+        "pip-services-runtime-node": "*"
+    },
+    "devDependencies": {
+        "mocha": "*",
+        "chai": "*",
+        "matcha": "*",
+        "seneca": "*",
+        "restify": "*",
+        "mongoose": "*",
+        "pip-services-quotes": "^1.0.*"
+    }
+}

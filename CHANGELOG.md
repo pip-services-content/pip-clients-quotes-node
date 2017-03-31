@@ -1,5 +1,10 @@
 # Quotes Microservice Client for Node.js ChangeLog
 
+## <a name="1.1.0"></a> 1.1.0 (2017-03-31)
+
+### Breaking Changes
+* Migrated to pip-services 2.0
+
 ## <a name="1.0.0"></a> 1.0.0 (2016-08-05)
 
 ### Breaking Changes

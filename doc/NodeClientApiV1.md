@@ -6,24 +6,24 @@ and provides high-level API to access the microservice for simple and productive
 
 * [Installation](#install)
 * [Getting started](#get_started)
-* [MultiString class](#class1)
-* [Quote class](#class2)
-* [QuotePage class](#class3)
-* [IQuoteClient interface](#interface)
+* [MultiStringV1 class](#class1)
+* [QuoteV1 class](#class2)
+* [DataPage<QuoteV1> class](#class3)
+* [IQuoteClientV1 interface](#interface)
     - [configure()](#operation0)
-    - [link()](#operation1)
-    - [open()](#operation2)
-    - [close()](#operation3)
+    - [setReferences()](#operation1)
+    - [open(correlationId, )](#operation2)
+    - [close(correlationId, )](#operation3)
     - [getQuotes()](#operation4)
     - [getRandomQuote()](#operation5)
     - [getQuoteById()](#operation6)
     - [createQuote()](#operation7)
     - [updateQuote()](#operation8)
-    - [deleteQuote()](#operation9)
-* [QuotesDirectClient class](#client_direct)
-* [QuotesRestClient class](#client_rest)
-* [QuotesSenecaClient class](#client_seneca)
-* [QuotesLambdaClient class](#client_lambda)
+    - [deleteQuoteById()](#operation9)
+* [QuotesDirectClientV1 class](#client_direct)
+* [QuotesRestClientV1 class](#client_rest)
+* [QuotesSenecaClientV1 class](#client_seneca)
+* [QuotesLambdaClientV1 class](#client_lambda)
 
 ## <a name="install"></a> Installation
 
@@ -34,7 +34,7 @@ To work with the client SDK add dependency into package.json file:
     ...
     "dependencies": {
         ....
-        "pip-clients-quotes-node": "*",
+        "pip-clients-quotes-node": "^1.1.0",
         ...
     }
 }
@@ -50,22 +50,17 @@ npm install
 npm update
 ```
 
-If you are using Typescript, add the following type definition where compiler can find it
-```javascript
-/// <reference path="../node_modules/pip-clients-quotes-node/module.d.ts" />
-```
-
 ## <a name="get_started"></a> Getting started
 
 This is a simple example on how to work with the microservice using REST client:
 
 ```javascript
 // Get Client SDK for Version 1 
-var sdk = new require('pip-clients-quotes-node').Version1;
+var sdk = new require('pip-clients-quotes-node');
 
 // Client configuration
 var config = {
-    endpoint: {
+    connection: {
         type: 'http',
         host: 'localhost', 
         port: 8002
@@ -73,10 +68,10 @@ var config = {
 };
 
 // Create the client instance
-var client = sdk.QuotesRestClient(config);
+var client = sdk.QuotesRestClientV1(config);
 
 // Open client connection to the microservice
-client.open(function(err) {
+client.open(correlationId, null, function(err) {
     if (err) {
         console.error(err);
         return; 
@@ -86,13 +81,14 @@ client.open(function(err) {
     
     // Create a new quote
     var quote = {
-        text: 'Get in hurry slowly',
-        author: 'Russian proverb',
+        text: { en: 'Get in hurry slowly' },
+        author: { en: 'Russian proverb' },
         tags: ['time management'],
         status: 'completed'
     };
 
     client.createQuote(
+        null,
         quote,
         function (err, quote) {
             if (err) {
@@ -114,17 +110,17 @@ client.open(function(err) {
                     skip: 0,
                     take: 10
                 },
-                function(err, quotesPage) {
+                function(err, page) {
                     if (err) {
                         console.error(err);
                         return;
                     }
                     
                     console.log('Quotes on time management are');
-                    console.log(quotesPage.data);
+                    console.log(page.data);
                     
                     // Close connection
-                    client.close(); 
+                    client.close(correlationId, ); 
                 }
             );
         }
@@ -132,7 +128,7 @@ client.open(function(err) {
 });
 ```
 
-### <a name="class1"></a> MultiString class
+### <a name="class1"></a> MultiStringV1 class
 
 String that contains versions in multiple languages
 
@@ -145,7 +141,7 @@ String that contains versions in multiple languages
 - ru: string - Russian version of the string
 - .. - other languages can be added here
 
-### <a name="class2"></a> Quote class
+### <a name="class2"></a> QuoteV1 class
 
 Represents an inspirational quote
 
@@ -157,32 +153,32 @@ Represents an inspirational quote
 - tags: string[] - (optional) search tags that represent topics associated with the quote
 - all_tags: string[] - (read only) explicit and hash tags in normalized format for searching  
 
-### <a name="class3"></a> QuotePage class
+### <a name="class3"></a> DataPage<QuoteV1> class
 
 Represents a paged result with subset of requested quotes
 
 **Properties:**
-- data: Quote[] - array of retrieved Quote page
+- data: QuoteV1[] - array of retrieved Quote page
 - count: int - total number of objects in retrieved resultset
 
-## <a name="interface"></a> IQuotesClient interface
+## <a name="interface"></a> IQuotesClientV1 interface
 
 If you are using Typescript, you can use IQuotesClient as a common interface across all client implementations. 
 If you are using plain Javascript, you shall not worry about IQuotesClient interface. You can just expect that
 all methods defined in this interface are implemented by all client classes.
 
 ```javascript
-interface IQuotesClient {
+interface IQuotesClientV1 {
     configure(config);
-    link(components);
-    open(callback);
-    close(callback);
+    setReferences(references);
+    open(correlationId, callback);
+    close(correlationId, callback);
     getQuotes(correlationId, filter, paging, callback);
     getRandomQuote(correlationId, filter, callback);
     getQuoteById(correlationId, quoteId, callback);
     createQuote(correlationId, quote, callback);
-    updateQuote(correlationId, quoteId, quote, callback);
-    deleteQuote(correlationId, quoteId, callback);
+    updateQuote(correlationId, quote, callback);
+    deleteQuoteById(correlationId, quoteId, callback);
 }
 ```
 
@@ -193,26 +189,28 @@ Sets component configuration
 **Arguments:** 
 - config: ComponentConfig - component configuration. Calling this method is not required when configuration is set in constructor
 
-### <a name="operation1"></a> init(components)
+### <a name="operation1"></a> setReferences(references)
 
 Initializes client references. Calling this method is not required when configuration is set in constructor
 
 **Arguments:** 
-- components: ComponentSet - references to other components, such as ILog or ICounters
+- references: IReferences - references to other components, such as ILog or ICounters
 
 
-### <a name="operation2"></a> open(callback)
+### <a name="operation2"></a> open(correlationId, callback)
 
 Opens connection to the microservice
 
 **Callback function parameters:**
+- correlationId: string - (optional) unique id that identifies distributed transaction
 - err - Error or null is no error occured
 
-### <a name="operation3"></a> close(callback)
+### <a name="operation3"></a> close(correlationId, callback)
 
 Closes connection to the microservice
 
 **Callback function parameters:**
+- correlationId: string - (optional) unique id that identifies distributed transaction
 - err - Error or null is no error occured
 
 ### <a name="operation4"></a> getQuotes(correlationId, filter, paging, callback)
@@ -232,7 +230,7 @@ Retrieves a collection of quotes according to specified criteria
   - paging: bool - (optional) true to enable paging and return total count
 - callback: (err, page) => void - callback function
   - err: Error - occured error or null for success
-  - page: DataPage - retrieved quotes in page format
+  - page: DataPage<QuoteV1> - retrieved quotes in page format
 
 ### <a name="operation5"></a> getRandomQuote(correlationId, filter, callback)
 
@@ -247,7 +245,7 @@ Retrieves a random quote from filtered resultset
   - except_ids: string[] - (optional) quote ids to exclude 
 - callback: (err, quote) => void - callback function
   - err: Error - occured error or null for success
-  - quote: Quote - random quote, null if object wasn't found 
+  - quote: QuoteV1 - random quote, null if object wasn't found 
 
 ### <a name="operation6"></a> getQuoteById(correlationId, quoteId, callback)
 
@@ -258,7 +256,7 @@ Retrieves a single quote specified by its unique id
 - quoteId: string - unique Quote id
 - callback: (err, quote) => void - callback function
   - err: Error - occured error or null for success
-  - quote: Quote - retrieved quote, null if object wasn't found 
+  - quote: QuoteV1 - retrieved quote, null if object wasn't found 
 
 ### <a name="operation7"></a> createQuote(correlationId, quote, callback)
 
@@ -266,24 +264,23 @@ Creates a new quote
 
 **Arguments:** 
 - correlationId: string - (optional) unique id that identifies distributed transaction
-- quote: Quote - Quote object to be created. If object id is not defined it is assigned automatically.
+- quote: QuoteV1 - Quote object to be created. If object id is not defined it is assigned automatically.
 - callback: (err, quote) => void - callback function
   - err: Error - occured error or null for success
-  - quote: Quote - created quote object
+  - quote: QuoteV1 - created quote object
 
-### <a name="operation8"></a> updateQuote(correlationId, quoteId, quote, callback)
+### <a name="operation8"></a> updateQuote(correlationId, quote, callback)
 
 Updates quote specified by its unique id
 
 **Arguments:** 
 - correlationId: string - (optional) unique id that identifies distributed transaction
-- quoteId: string - unique quote id
-- quote: Quote - quote object with new values. Partial updates are supported
-- callback: (err, quote) => void - callback function
+- quote: QuoteV1 - quote object with new values. Partial updates are supported
+- callback: (err, quoteV1) => void - callback function
   - err: Error - occured error or null for success
   - quote: Quote - updated quote object 
 
-### <a name="operation9"></a> deleteQuote(correlationId, quoteId, callback)
+### <a name="operation9"></a> deleteQuoteById(correlationId, quoteId, callback)
 
 Deletes quote specified by its unique id
 
@@ -293,108 +290,109 @@ Deletes quote specified by its unique id
 - callback: (err) => void - callback function
   - err: Error - occured error or null for success
  
-## <a name="client_direct"></a> QuotesDirectClient class
+## <a name="client_direct"></a> QuotesDirectClientV1 class
 
-QuotesDirectClient is a direct client to call controller inside microservice container
+QuotesDirectClientV1 is a direct client to call controller inside microservice container
 
 ```javascript
-class QuotesDirectClient extends DirectClient implements IQuotesClient {
+class QuotesDirectClientV1 extends DirectClient implements IQuotesClientV1 {
     constructor(config: any = null);
     configure(config);
-    link(components);
-    open(callback);
-    close(callback);
+    setReferences(references);
+    open(correlationId, callback);
+    close(correlationId, callback);
     getQuotes(correlationId, filter, paging, callback);
     getRandomQuote(correlationId, filter, callback);
     getQuoteById(correlationId, quoteId, callback);
     createQuote(correlationId, quote, callback);
     updateQuote(correlationId, quoteId, quote, callback);
-    deleteQuote(correlationId, quoteId, callback);
+    deleteQuoteById(correlationId, quoteId, callback);
 }
 ```
 
 **Constructor config properties:** 
 - ...
 
-## <a name="client_rest"></a> QuotesRestClient class
+## <a name="client_rest"></a> QuotesRestClientV1 class
 
-QuotesRestClient is a client that implements HTTP/REST protocol
+QuotesRestClientV1 is a client that implements HTTP/REST protocol
 
 ```javascript
-class QuotesRestClient extends RestClient implements IQuotesClient {
+class QuotesRestClientV1 extends RestClient implements IQuotesClientV1 {
     constructor(config: any = null);
     configure(config);
-    link(components);
-    open(callback);
-    close(callback);
+    setReferences(references);
+    open(correlationId, callback);
+    close(correlationId, callback);
     getQuotes(correlationId, filter, paging, callback);
     getRandomQuote(correlationId, filter, callback);
     getQuoteById(correlationId, quoteId, callback);
     createQuote(correlationId, quote, callback);
-    updateQuote(correlationId, quoteId, quote, callback);
-    deleteQuote(correlationId, quoteId, callback);
+    updateQuote(correlationId, quote, callback);
+    deleteQuoteById(correlationId, quoteId, callback);
 }
 ```
 
 **Constructor config properties:** 
-- endpoint: object - HTTP transport configuration options
+- connection: object - HTTP transport configuration options
   - type: string - HTTP protocol - 'http' or 'https' (default is 'http')
   - host: string - IP address/hostname binding (default is '0.0.0.0')
   - port: number - HTTP port number
 
-## <a name="client_seneca"></a> QuotesSenecaClient class
+## <a name="client_seneca"></a> QuotesSenecaClientV1 class
 
-QuotesSenecaClient is a client that implements Seneca protocol
+QuotesSenecaClientV1 is a client that implements Seneca protocol
 
 ```javascript
-class QuotesSenecaClient extends SenecaClient implements IQuotesClient {
+class QuotesSenecaClientV1 extends SenecaClient implements IQuotesClientV1 {
     constructor(config: any = null);        
     configure(config);
-    link(components);
-    open(callback);
-    close(callback);
+    setReferences(references);
+    open(correlationId, callback);
+    close(correlationId, callback);
     getQuotes(correlationId, filter, paging, callback);
     getRandomQuote(correlationId, filter, callback);
     getQuoteById(correlationId, quoteId, callback);
     createQuote(correlationId, quote, callback);
-    updateQuote(correlationId, quoteId, quote, callback);
-    deleteQuote(correlationId, quoteId, callback);
+    updateQuote(correlationId, quote, callback);
+    deleteQuoteById(correlationId, quoteId, callback);
 }
 ```
 
 **Constructor config properties:** 
-- endpoint: object - (optional) Seneca transport configuration options. See http://senecajs.org/api/ for details.
+- connection: object - (optional) Seneca transport configuration options. See http://senecajs.org/api/ for details.
   - type: string - Seneca transport type 
   - host: string - IP address/hostname binding (default is '0.0.0.0')
   - port: number - Seneca port number
 
-## <a name="client_lambda"></a> QuotesLambdaClient class
+## <a name="client_lambda"></a> QuotesLambdaClientV1 class
 
-QuotesLambdaClient is a client that calls AWS Lamba functions
+QuotesLambdaClientV1 is a client that calls AWS Lamba functions
 
 ```javascript
-class QuotesLambdaClient extends LambdaClient implements IQuotesClient {
+class QuotesLambdaClientV1 extends LambdaClient implements IQuotesClientV1 {
     constructor(config: any = null);        
     configure(config);
-    link(components);
-    open(callback);
-    close(callback);
+    setReferences(references);
+    open(correlationId, callback);
+    close(correlationId, callback);
     getQuotes(correlationId, filter, paging, callback);
     getRandomQuote(correlationId, filter, callback);
     getQuoteById(correlationId, quoteId, callback);
     createQuote(correlationId, quote, callback);
-    updateQuote(correlationId, quoteId, quote, callback);
-    deleteQuote(correlationId, quoteId, callback);
+    updateQuote(correlationId, quote, callback);
+    deleteQuoteById(correlationId, quoteId, callback);
 }
 ```
 
 **Constructor config properties:** 
-- endpoint: object - AWS Lambda connection properties
+- connection: object - AWS Lambda connection properties
   - protocol: "aws"
   - region: string - AWS availability region like "us-east-1"
   - function: string - unique function name or arn like "arn:aws:lambda:us-east-1:268549927901:function:pip-services-template-node"
-- options: object - AWS Lambda access keys and additional parameters
+- credential: object - AWS Lambda access keys and additional parameters
   - access\_key\_id: string - AWS access key id
   - secret\_access\_key: string - AWS secret access key
+- options: object
   - timeout: number - communication timeout in milliseconds (default: 30,000)
   

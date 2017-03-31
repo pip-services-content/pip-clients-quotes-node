@@ -21,7 +21,7 @@ Add dependency to the client SDK into **package.json** file of your project
     ...
     "dependencies": {
         ....
-        "pip-clients-quotes-node": "^1.0.*",
+        "pip-clients-quotes-node": "^2.0.*",
         ...
     }
 }
@@ -40,14 +40,14 @@ npm update
 
 Inside your code get the reference to the client SDK
 ```javascript
-var sdk = new require('pip-clients-quotes-node').Version1;
+var sdk = new require('pip-clients-quotes-node');
 ```
 
 Define client configuration parameters that match configuration of the microservice external API
 ```javascript
 // Client configuration
 var config = {
-    endpoint: {
+    connection: {
         protocol: 'http',
         host: 'localhost', 
         port: 8002
@@ -58,10 +58,10 @@ var config = {
 Instantiate the client and open connection to the microservice
 ```javascript
 // Create the client instance
-var client = sdk.QuotesRestClient(config);
+var client = sdk.QuotesRestClientV1(config);
 
 // Connect to the microservice
-client.open(function(err) {
+client.open(null, function(err) {
     if (err) {
         console.error('Connection to the microservice failed');
         console.error(err);
@@ -77,8 +77,8 @@ Now the client is ready to perform operations
 ```javascript
 // Create a new quote
 var quote = {
-    text: 'Get in hurry slowly',
-    author: 'Russian proverb',
+    text: { en: 'Get in hurry slowly' },
+    author: { en: 'Russian proverb' },
     tags: ['time management'],
     status: 'completed'
 };
@@ -105,7 +105,7 @@ client.getQuotes(
         skip: 0,
         take: 10
     },
-    function(err, quotesPage) {
+    function(err, page) {
     ...    
 });
 ```    

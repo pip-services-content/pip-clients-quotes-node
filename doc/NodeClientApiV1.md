@@ -6,9 +6,8 @@ and provides high-level API to access the microservice for simple and productive
 
 * [Installation](#install)
 * [Getting started](#get_started)
-* [MultiStringV1 class](#class1)
-* [QuoteV1 class](#class2)
-* [DataPage<QuoteV1> class](#class3)
+* [QuoteV1 class](#class1)
+* [DataPage<QuoteV1> class](#class2)
 * [IQuoteClientV1 interface](#interface)
     - [configure()](#operation0)
     - [setReferences()](#operation1)
@@ -21,7 +20,7 @@ and provides high-level API to access the microservice for simple and productive
     - [updateQuote()](#operation8)
     - [deleteQuoteById()](#operation9)
 * [QuotesDirectClientV1 class](#client_direct)
-* [QuotesRestClientV1 class](#client_rest)
+* [QuotesHttpClientV1 class](#client_http)
 * [QuotesSenecaClientV1 class](#client_seneca)
 * [QuotesLambdaClientV1 class](#client_lambda)
 
@@ -61,17 +60,17 @@ var sdk = new require('pip-clients-quotes-node');
 // Client configuration
 var config = {
     connection: {
-        type: 'http',
+        protocol: 'http',
         host: 'localhost', 
         port: 8002
     }
 };
 
 // Create the client instance
-var client = sdk.QuotesRestClientV1(config);
+var client = sdk.QuotesHttpClientV1(config);
 
 // Open client connection to the microservice
-client.open(correlationId, null, function(err) {
+client.open(null, null, function(err) {
     if (err) {
         console.error(err);
         return; 
@@ -128,20 +127,7 @@ client.open(correlationId, null, function(err) {
 });
 ```
 
-### <a name="class1"></a> MultiStringV1 class
-
-String that contains versions in multiple languages
-
-**Properties:**
-- en: string - English version of the string
-- sp: string - Spanish version of the string
-- de: string - German version of the string
-- fr: string - Franch version of the string
-- pt: string - Portuguese version of the string
-- ru: string - Russian version of the string
-- .. - other languages can be added here
-
-### <a name="class2"></a> QuoteV1 class
+### <a name="class1"></a> QuoteV1 class
 
 Represents an inspirational quote
 
@@ -153,7 +139,7 @@ Represents an inspirational quote
 - tags: string[] - (optional) search tags that represent topics associated with the quote
 - all_tags: string[] - (read only) explicit and hash tags in normalized format for searching  
 
-### <a name="class3"></a> DataPage<QuoteV1> class
+### <a name="class2"></a> DataPage<QuoteV1> class
 
 Represents a paged result with subset of requested quotes
 
@@ -313,12 +299,12 @@ class QuotesDirectClientV1 extends DirectClient implements IQuotesClientV1 {
 **Constructor config properties:** 
 - ...
 
-## <a name="client_rest"></a> QuotesRestClientV1 class
+## <a name="client_http"></a> QuotesHttpClientV1 class
 
-QuotesRestClientV1 is a client that implements HTTP/REST protocol
+QuotesHttpClientV1 is a client that implements HTTP protocol
 
 ```javascript
-class QuotesRestClientV1 extends RestClient implements IQuotesClientV1 {
+class QuotesHttpClientV1 extends CommandableHttpClient implements IQuotesClientV1 {
     constructor(config: any = null);
     configure(config);
     setReferences(references);

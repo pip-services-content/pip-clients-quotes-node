@@ -4,7 +4,7 @@ This is a Node.js client SDK for [pip-services-quotes](https://github.com/pip-se
 It provides an easy to use abstraction over communication protocols:
 
 * Direct client
-* HTTP/REST client
+* HTTP client
 * Seneca client (see http://www.senecajs.org)
 * AWS Lambda client (see https://aws.amazon.com/lambda)
 
@@ -58,7 +58,7 @@ var config = {
 Instantiate the client and open connection to the microservice
 ```javascript
 // Create the client instance
-var client = sdk.QuotesRestClientV1(config);
+var client = sdk.QuotesHttpClientV1(config);
 
 // Connect to the microservice
 client.open(null, function(err) {

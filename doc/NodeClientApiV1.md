@@ -7,18 +7,13 @@ and provides high-level API to access the microservice for simple and productive
 * [Installation](#install)
 * [Getting started](#get_started)
 * [QuoteV1 class](#class1)
-* [DataPage<QuoteV1> class](#class2)
 * [IQuoteClientV1 interface](#interface)
-    - [configure()](#operation0)
-    - [setReferences()](#operation1)
-    - [open(correlationId, )](#operation2)
-    - [close(correlationId, )](#operation3)
-    - [getQuotes()](#operation4)
-    - [getRandomQuote()](#operation5)
-    - [getQuoteById()](#operation6)
-    - [createQuote()](#operation7)
-    - [updateQuote()](#operation8)
-    - [deleteQuoteById()](#operation9)
+    - [getQuotes()](#operation1)
+    - [getRandomQuote()](#operation2)
+    - [getQuoteById()](#operation3)
+    - [createQuote()](#operation4)
+    - [updateQuote()](#operation5)
+    - [deleteQuoteById()](#operation6)
 * [QuotesDirectClientV1 class](#client_direct)
 * [QuotesHttpClientV1 class](#client_http)
 * [QuotesSenecaClientV1 class](#client_seneca)
@@ -139,14 +134,6 @@ Represents an inspirational quote
 - tags: string[] - (optional) search tags that represent topics associated with the quote
 - all_tags: string[] - (read only) explicit and hash tags in normalized format for searching  
 
-### <a name="class2"></a> DataPage<QuoteV1> class
-
-Represents a paged result with subset of requested quotes
-
-**Properties:**
-- data: QuoteV1[] - array of retrieved Quote page
-- count: int - total number of objects in retrieved resultset
-
 ## <a name="interface"></a> IQuotesClientV1 interface
 
 If you are using Typescript, you can use IQuotesClient as a common interface across all client implementations. 
@@ -155,10 +142,6 @@ all methods defined in this interface are implemented by all client classes.
 
 ```javascript
 interface IQuotesClientV1 {
-    configure(config);
-    setReferences(references);
-    open(correlationId, callback);
-    close(correlationId, callback);
     getQuotes(correlationId, filter, paging, callback);
     getRandomQuote(correlationId, filter, callback);
     getQuoteById(correlationId, quoteId, callback);
@@ -168,38 +151,7 @@ interface IQuotesClientV1 {
 }
 ```
 
-### <a name="operation0"></a> configure(config)
-
-Sets component configuration
-
-**Arguments:** 
-- config: ComponentConfig - component configuration. Calling this method is not required when configuration is set in constructor
-
-### <a name="operation1"></a> setReferences(references)
-
-Initializes client references. Calling this method is not required when configuration is set in constructor
-
-**Arguments:** 
-- references: IReferences - references to other components, such as ILog or ICounters
-
-
-### <a name="operation2"></a> open(correlationId, callback)
-
-Opens connection to the microservice
-
-**Callback function parameters:**
-- correlationId: string - (optional) unique id that identifies distributed transaction
-- err - Error or null is no error occured
-
-### <a name="operation3"></a> close(correlationId, callback)
-
-Closes connection to the microservice
-
-**Callback function parameters:**
-- correlationId: string - (optional) unique id that identifies distributed transaction
-- err - Error or null is no error occured
-
-### <a name="operation4"></a> getQuotes(correlationId, filter, paging, callback)
+### <a name="operation1"></a> getQuotes(correlationId, filter, paging, callback)
 
 Retrieves a collection of quotes according to specified criteria
 
@@ -218,7 +170,7 @@ Retrieves a collection of quotes according to specified criteria
   - err: Error - occured error or null for success
   - page: DataPage<QuoteV1> - retrieved quotes in page format
 
-### <a name="operation5"></a> getRandomQuote(correlationId, filter, callback)
+### <a name="operation2"></a> getRandomQuote(correlationId, filter, callback)
 
 Retrieves a random quote from filtered resultset
 
@@ -233,7 +185,7 @@ Retrieves a random quote from filtered resultset
   - err: Error - occured error or null for success
   - quote: QuoteV1 - random quote, null if object wasn't found 
 
-### <a name="operation6"></a> getQuoteById(correlationId, quoteId, callback)
+### <a name="operation3"></a> getQuoteById(correlationId, quoteId, callback)
 
 Retrieves a single quote specified by its unique id
 
@@ -244,7 +196,7 @@ Retrieves a single quote specified by its unique id
   - err: Error - occured error or null for success
   - quote: QuoteV1 - retrieved quote, null if object wasn't found 
 
-### <a name="operation7"></a> createQuote(correlationId, quote, callback)
+### <a name="operation4"></a> createQuote(correlationId, quote, callback)
 
 Creates a new quote
 
@@ -255,7 +207,7 @@ Creates a new quote
   - err: Error - occured error or null for success
   - quote: QuoteV1 - created quote object
 
-### <a name="operation8"></a> updateQuote(correlationId, quote, callback)
+### <a name="operation5"></a> updateQuote(correlationId, quote, callback)
 
 Updates quote specified by its unique id
 
@@ -266,7 +218,7 @@ Updates quote specified by its unique id
   - err: Error - occured error or null for success
   - quote: Quote - updated quote object 
 
-### <a name="operation9"></a> deleteQuoteById(correlationId, quoteId, callback)
+### <a name="operation6"></a> deleteQuoteById(correlationId, quoteId, callback)
 
 Deletes quote specified by its unique id
 
@@ -347,7 +299,7 @@ class QuotesSenecaClientV1 extends SenecaClient implements IQuotesClientV1 {
 
 **Constructor config properties:** 
 - connection: object - (optional) Seneca transport configuration options. See http://senecajs.org/api/ for details.
-  - type: string - Seneca transport type 
+  - protocol: string - Seneca transport type 
   - host: string - IP address/hostname binding (default is '0.0.0.0')
   - port: number - Seneca port number
 

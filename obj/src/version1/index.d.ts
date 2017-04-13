@@ -4,3 +4,4 @@ export { IQuotesClientV1 } from './IQuotesClientV1';
 export { QuotesDirectClientV1 } from './QuotesDirectClientV1';
 export { QuotesHttpClientV1 } from './QuotesHttpClientV1';
 export { QuotesSenecaClientV1 } from './QuotesSenecaClientV1';
+export { QuotesLambdaClientV1 } from './QuotesLambdaClientV1';

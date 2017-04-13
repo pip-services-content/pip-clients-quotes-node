@@ -10,5 +10,6 @@ var QuotesHttpClientV1_1 = require("./QuotesHttpClientV1");
 exports.QuotesHttpClientV1 = QuotesHttpClientV1_1.QuotesHttpClientV1;
 var QuotesSenecaClientV1_1 = require("./QuotesSenecaClientV1");
 exports.QuotesSenecaClientV1 = QuotesSenecaClientV1_1.QuotesSenecaClientV1;
-//export { QuotesLambdaClientV1 } from './QuotesLambdaClientV1';
+var QuotesLambdaClientV1_1 = require("./QuotesLambdaClientV1");
+exports.QuotesLambdaClientV1 = QuotesLambdaClientV1_1.QuotesLambdaClientV1;
 //# sourceMappingURL=index.js.map

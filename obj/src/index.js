@@ -4,6 +4,6 @@ function __export(m) {
 }
 Object.defineProperty(exports, "__esModule", { value: true });
 __export(require("./version1"));
-var QuotesFactory_1 = require("./build/QuotesFactory");
-exports.QuotesFactory = QuotesFactory_1.QuotesFactory;
+var QuotesClientFactory_1 = require("./build/QuotesClientFactory");
+exports.QuotesClientFactory = QuotesClientFactory_1.QuotesClientFactory;
 //# sourceMappingURL=index.js.map

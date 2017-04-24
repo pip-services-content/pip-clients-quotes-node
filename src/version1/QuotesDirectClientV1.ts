@@ -6,10 +6,10 @@ import { DataPage } from 'pip-services-commons-node';
 import { DirectClient } from 'pip-services-net-node';
 
 import { IQuotesClientV1 } from './IQuotesClientV1';
-import { IQuotesBusinessLogic } from 'pip-services-quotes-node';
+//import { IQuotesController } from 'pip-services-quotes-node';
 import { QuoteV1 } from './QuoteV1';
 
-export class QuotesDirectClientV1 extends DirectClient<IQuotesBusinessLogic> implements IQuotesClientV1 {
+export class QuotesDirectClientV1 extends DirectClient<any> implements IQuotesClientV1 {
             
     public constructor() {
         super();

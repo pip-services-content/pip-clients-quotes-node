@@ -1,5 +1,5 @@
 import { Descriptor } from 'pip-services-commons-node';
-import { Factory } from 'pip-services-commons-node';
+import { Factory } from 'pip-services-components-node';
 
 import { QuotesDirectClientV1 } from '../version1/QuotesDirectClientV1';
 import { QuotesHttpClientV1 } from '../version1/QuotesHttpClientV1';

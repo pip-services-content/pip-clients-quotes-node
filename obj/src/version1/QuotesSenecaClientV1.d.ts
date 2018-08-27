@@ -1,7 +1,7 @@
 import { FilterParams } from 'pip-services-commons-node';
 import { PagingParams } from 'pip-services-commons-node';
 import { DataPage } from 'pip-services-commons-node';
-import { CommandableSenecaClient } from 'pip-services-net-node';
+import { CommandableSenecaClient } from 'pip-services-seneca-node';
 import { QuoteV1 } from './QuoteV1';
 import { IQuotesClientV1 } from './IQuotesClientV1';
 export declare class QuotesSenecaClientV1 extends CommandableSenecaClient implements IQuotesClientV1 {

@@ -2,8 +2,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 let _ = require('lodash');
 const pip_services_commons_node_1 = require("pip-services-commons-node");
-const pip_services_net_node_1 = require("pip-services-net-node");
-class QuotesSenecaClientV1 extends pip_services_net_node_1.CommandableSenecaClient {
+const pip_services_seneca_node_1 = require("pip-services-seneca-node");
+class QuotesSenecaClientV1 extends pip_services_seneca_node_1.CommandableSenecaClient {
     constructor(config) {
         super('quotes');
         if (config != null)

@@ -1,7 +1,7 @@
 import { FilterParams } from 'pip-services-commons-node';
 import { PagingParams } from 'pip-services-commons-node';
 import { DataPage } from 'pip-services-commons-node';
-import { CommandableHttpClient } from 'pip-services-net-node';
+import { CommandableHttpClient } from 'pip-services-rpc-node';
 import { QuoteV1 } from './QuoteV1';
 import { IQuotesClientV1 } from './IQuotesClientV1';
 export declare class QuotesHttpClientV1 extends CommandableHttpClient implements IQuotesClientV1 {

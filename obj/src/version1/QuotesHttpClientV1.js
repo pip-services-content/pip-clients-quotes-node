@@ -1,10 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const pip_services_commons_node_1 = require("pip-services-commons-node");
-const pip_services_net_node_1 = require("pip-services-net-node");
-class QuotesHttpClientV1 extends pip_services_net_node_1.CommandableHttpClient {
+const pip_services_rpc_node_1 = require("pip-services-rpc-node");
+class QuotesHttpClientV1 extends pip_services_rpc_node_1.CommandableHttpClient {
     constructor(config) {
-        super('quotes');
+        super('v1/quotes');
         if (config != null)
             this.configure(pip_services_commons_node_1.ConfigParams.fromValue(config));
     }

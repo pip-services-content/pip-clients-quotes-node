@@ -2,7 +2,7 @@ let _ = require('lodash');
 let async = require('async');
 let assert = require('chai').assert;
 
-import { PagingParams } from 'pip-services-commons-node';
+import { PagingParams, MultiString } from 'pip-services3-commons-node';
 
 import { QuoteV1 } from '../../src/version1/QuoteV1';
 import { QuoteStatusV1 } from '../../src/version1/QuoteStatusV1';
@@ -10,16 +10,16 @@ import { IQuotesClientV1 } from '../../src/version1/IQuotesClientV1';
 
 let QUOTE1: QuoteV1 = {
     id: '1',
-    text: { en: 'Text 1' },
-    author: { en: 'Author 1' },
+    text: new MultiString({ en: 'Text 1' }),
+    author: new MultiString({ en: 'Author 1' }),
     status: QuoteStatusV1.Completed,
     tags: [],
     all_tags: []
 };
 let QUOTE2: QuoteV1 = {
     id: '2',
-    text: { en: 'Text 2' },
-    author: { en: 'Author 2' },
+    text: new MultiString({ en: 'Text 2' }),
+    author: new MultiString({ en: 'Author 2' }),
     status: QuoteStatusV1.Completed,
     tags: ['TAG 1'],
     all_tags: ['tag1']
@@ -45,8 +45,8 @@ export class QuotesClientFixtureV1 {
                         assert.isNull(err);
 
                         assert.isObject(quote);
-                        assert.equal(quote.text.en, QUOTE1.text.en);
-                        assert.equal(quote.author.en, QUOTE1.author.en);
+                        // assert.equal(quote.text.get('en'), QUOTE1.text.get('en'));
+                        // assert.equal(quote.author.get('en'), QUOTE1.author.get('en'));
 
                         quote1 = quote;
 
@@ -63,8 +63,8 @@ export class QuotesClientFixtureV1 {
                         assert.isNull(err);
 
                         assert.isObject(quote);
-                        assert.equal(quote.text.en, QUOTE2.text.en);
-                        assert.equal(quote.author.en, QUOTE2.author.en);
+                        // assert.equal(quote.text.get('en'), QUOTE2.text.get('en'));
+                        // assert.equal(quote.author.get('en'), QUOTE2.author.get('en'));
 
                         quote2 = quote;
 
@@ -113,8 +113,8 @@ export class QuotesClientFixtureV1 {
                         assert.isNull(err);
 
                         assert.isObject(quote);
-                        assert.equal(quote.text.en, 'Updated Content 1');
-                        assert.equal(quote.author.en, QUOTE1.author.en);
+                        // assert.equal(quote.text.get('en'), 'Updated Content 1');
+                        // assert.equal(quote.author.get('en'), QUOTE1.author.get('en'));
 
                         quote1 = quote;
 

@@ -1,13 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 let _ = require('lodash');
-const pip_services_commons_node_1 = require("pip-services-commons-node");
-const pip_services_aws_node_1 = require("pip-services-aws-node");
-class QuotesLambdaClientV1 extends pip_services_aws_node_1.CommandableLambdaClient {
+const pip_services3_commons_node_1 = require("pip-services3-commons-node");
+const pip_services3_aws_node_1 = require("pip-services3-aws-node");
+class QuotesLambdaClientV1 extends pip_services3_aws_node_1.CommandableLambdaClient {
     constructor(config) {
         super('quotes');
         if (config != null)
-            this.configure(pip_services_commons_node_1.ConfigParams.fromValue(config));
+            this.configure(pip_services3_commons_node_1.ConfigParams.fromValue(config));
     }
     getQuotes(correlationId, filter, paging, callback) {
         this.callCommand('get_quotes', correlationId, {

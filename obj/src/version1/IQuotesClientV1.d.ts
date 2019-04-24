@@ -1,6 +1,6 @@
-import { DataPage } from 'pip-services-commons-node';
-import { FilterParams } from 'pip-services-commons-node';
-import { PagingParams } from 'pip-services-commons-node';
+import { DataPage } from 'pip-services3-commons-node';
+import { FilterParams } from 'pip-services3-commons-node';
+import { PagingParams } from 'pip-services3-commons-node';
 import { QuoteV1 } from './QuoteV1';
 export interface IQuotesClientV1 {
     getQuotes(correlationId: string, filter: FilterParams, paging: PagingParams, callback: (err: any, page: DataPage<QuoteV1>) => void): void;

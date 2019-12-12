@@ -1,6 +1,6 @@
 {
     "name": "pip-clients-quotes-node",
-    "version": "1.1.0",
+    "version": "1.1.1",
     "author": "Conceptual Vision Consulting LLC",
     "description": "Node.js client sdk for pip-services-quotes microservice",
     "contributors": [
@@ -48,13 +48,9 @@
         "@types/async": "^2.0.0",
         "@types/chai": "*",
         "@types/mocha": "*",
-        "@types/mongodb": "^2.1.38",
-        "@types/mongoose": "^4.7.4",
         "restify": "^4.3.0",
         "chai": "*",
-        "matcha": "*",
         "mocha": "*",
-        "aws-sdk": "*",
-        "pip-services-quotes-node": "git+ssh://git@github.com:pip-services-content/pip-services-quotes-node.git"
+        "pip-services-quotes-node": "^1.2.0"
     }
 }

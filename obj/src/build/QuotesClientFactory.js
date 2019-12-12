@@ -13,9 +13,9 @@ class QuotesClientFactory extends pip_services3_components_node_1.Factory {
         this.registerAsType(QuotesClientFactory.LambdaClientV1Descriptor, QuotesLambdaClientV1_1.QuotesLambdaClientV1);
     }
 }
+exports.QuotesClientFactory = QuotesClientFactory;
 QuotesClientFactory.Descriptor = new pip_services3_commons_node_1.Descriptor('pip-services-quotes', 'factory', 'default', 'default', '1.0');
 QuotesClientFactory.DirectClientV1Descriptor = new pip_services3_commons_node_1.Descriptor('pip-services-quotes', 'client', 'direct', 'default', '1.0');
 QuotesClientFactory.HttpClientV1Descriptor = new pip_services3_commons_node_1.Descriptor('pip-services-quotes', 'client', 'http', 'default', '1.0');
 QuotesClientFactory.LambdaClientV1Descriptor = new pip_services3_commons_node_1.Descriptor('pip-services-quotes', 'client', 'lambda', 'default', '1.0');
-exports.QuotesClientFactory = QuotesClientFactory;
 //# sourceMappingURL=QuotesClientFactory.js.map
